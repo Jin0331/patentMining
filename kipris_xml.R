@@ -20,7 +20,7 @@ total_count <- all_xml_node %>% xml_find_all(".//totalCount") %>% xml_text() %>%
 total_page <- round(total_count / numRows) + 1
 
 # each page search
-page_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0","&numOfRows=",numRows,"","&ServiceKey=",auth_key)
+page_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0", "&pageNo=", page,"&numOfRows=",numRows,"","&ServiceKey=",auth_key)
 
 register_number <- all_xml_node %>% xml_find_all(".//body") %>% xml_find_first(".//applicationNumber") %>% xml_text()
 
