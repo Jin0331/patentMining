@@ -10,7 +10,7 @@ url <- "http://plus.kipris.or.kr/kipo-api/kipi/patUtiModInfoSearchSevice/"
 
 # General Search keyword
 search_keyword <- "TP53"
-numRows <- 200
+numRows <- 100
 
 # General Search extraction
 general_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0&ServiceKey=",auth_key)
@@ -20,8 +20,8 @@ total_count <- all_xml_node %>% xml_find_all(".//totalCount") %>% xml_text() %>%
 total_page <- round(total_count / numRows) + 1
 
 # each page search
+while,, function
 page_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0", "&pageNo=", page,"&numOfRows=",numRows,"","&ServiceKey=",auth_key)
-
 register_number <- all_xml_node %>% xml_find_all(".//body") %>% xml_find_first(".//applicationNumber") %>% xml_text()
 
 
