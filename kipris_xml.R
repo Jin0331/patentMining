@@ -10,32 +10,54 @@ url <- "http://plus.kipris.or.kr/kipo-api/kipi/patUtiModInfoSearchSevice/"
 
 # General Search keyword
 search_keyword <- "TP53"
-numRows <- 200
-register_number_list <- list()
 
-# General Search extraction
-general_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0&ServiceKey=",auth_key)
-xml_node <- httr::GET(general_search) %>% httr::content(encoding = "UTF-8") # raw node
-
-responese_value <- xml_node %>% xml_find_all(".//successYN") %>% xml_text() # Y or N
-
-if(responese_value != "Y"){}
-
-total_count <- xml_node %>% xml_find_all(".//totalCount") %>% xml_text() %>% as.integer() # integer
-total_page <- round(total_count / numRows) + 1 # total count
-
-# each page search
-# page 1 시작
-for(page in seq(1,total_page)){
-  page_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0", "&pageNo=", page, "&numOfRows=",numRows,"","&ServiceKey=", auth_key)
-  all_xml_node <- httr::GET(page_search) %>% httr::content(encoding = "UTF-8")
-  register_number_list[[page]] <- all_xml_node %>% xml_find_all(".//body") %>% xml_find_all(".//applicationNumber") %>% xml_text()
-  Sys.sleep(2);print(paste0(page, " is done!@!"))
+getPublishNumber <- function(search_keyword, numRows){
+  numRows <- 200
+  register_number_list <- list()
+  
+  # General Search extraction
+  general_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0&ServiceKey=",auth_key)
+  xml_node <- httr::GET(general_search) %>% httr::content(encoding = "UTF-8") # raw node
+  
+  responese_value <- xml_node %>% xml_find_all(".//successYN") %>% xml_text() # Y or N
+  
+  if(responese_value == "N"){
+    print("Not response")
+    return(NULL)
+  } 
+  
+  total_count <- xml_node %>% xml_find_all(".//totalCount") %>% xml_text() %>% as.integer() # integer
+  total_page <- round(total_count / numRows) + 1 # total count
+  
+  # each page search
+  # page 1 시작
+  page <- 1
+  while(TRUE){
+    page_search <- paste0(url, "getWordSearch?word=",search_keyword,"&year=0", "&pageNo=", page, "&numOfRows=",numRows,"","&ServiceKey=", auth_key)
+    
+    
+    re <- FALSE
+    tryCatch(
+      expr = {
+        all_xml_node <- httr::GET(page_search) %>% httr::content(encoding = "UTF-8")
+      },
+      error = function(e) { print(e);re <<- TRUE}
+    )
+    
+    if(re){
+      print("repose error!! reload!")
+      next
+    }
+    
+    register_number_list[[page]] <- all_xml_node %>% xml_find_all(".//body") %>% xml_find_all(".//applicationNumber") %>% xml_text()
+    Sys.sleep(2);print(paste0(page, " is done!@!"))
+    page <- page + 1
+  }
+  
+  # register number
+  combine_register_number <- register_number_list %>% unlist()
+  return(combine_register_number)
 }
-
-# register number
-combine_register_number <- register_number_list %>% unlist()
-
 
 # Bibliography extraction
 biblio_search <- paste0(url, "getBibliographyDetailInfoSearch?applicationNumber=",combine_register_number[2],"&ServiceKey=", auth_key)
