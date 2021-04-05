@@ -54,7 +54,7 @@ getPublishNumber <- function(search_keyword, numRows, auth_key){
   # register number
   combine_register_number <- register_number_list %>% unlist()
   return(combine_register_number)
-}
+} # domestic search
 getBibliography <- function(register_number, auth_key){
   biblio_search <- paste0(url, "getBibliographyDetailInfoSearch?applicationNumber=",register_number, "&ServiceKey=", auth_key)
   xml_node <- httr::GET(biblio_search) %>% httr::content(encoding = "UTF-8")
@@ -87,13 +87,16 @@ getBibliography <- function(register_number, auth_key){
     } else { return(info)}
   })
   
-  biblio_DF <- tibble(applicationNumber = info_list_filter[["applicationNumber"]], applicationDate = info_list_filter[["applicationDate"]], 
+  biblio_DF <- tibble(country = "KOR", applicationNumber = info_list_filter[["applicationNumber"]], applicationDate = info_list_filter[["applicationDate"]], 
                       familyApplicationNumber = info_list_filter[["familyApplicationNumber"]], originalApplicationKind = info_list_filter[["originalApplicationKind"]],
                       invetionTitle = info_list_filter[["invetionTitle"]], invetionTitle_eng = info_list_filter[["invetionTitle_eng"]], 
                       claimCount = info_list_filter[["claimCount"]], claim = info_list_filter[["claim"]], inc = info_list_filter[["eng"]], 
                       inc_country = info_list_filter[["country"]])
   return(biblio_DF)
-}
+} # domestic search
+
+
+
 
 # Bibliography extraction
 
