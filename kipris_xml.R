@@ -90,7 +90,7 @@ getBibliography <- function(register_number, auth_key){
   biblio_DF <- tibble(applicationNumber = info_list_filter[["applicationNumber"]], applicationDate = info_list_filter[["applicationDate"]], 
                       familyApplicationNumber = info_list_filter[["familyApplicationNumber"]], originalApplicationKind = info_list_filter[["originalApplicationKind"]],
                       invetionTitle = info_list_filter[["invetionTitle"]], invetionTitle_eng = info_list_filter[["invetionTitle_eng"]], 
-                      claimCount = info_list_filter[["claimCount"]], claim = info_list_filter[["claim"]], inc = info_list_filter[["claim"]], 
+                      claimCount = info_list_filter[["claimCount"]], claim = info_list_filter[["claim"]], inc = info_list_filter[["eng"]], 
                       inc_country = info_list_filter[["country"]])
   return(biblio_DF)
 }
