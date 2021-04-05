@@ -3,6 +3,7 @@ library(httr)
 library(tidyverse)
 
 # general search info page : https://plus.kipris.or.kr/portal/data/service/DBII_000000000000001/view.do?menuNo=200100&kppBCode=&kppMCode=&kppSCode=&subTab=SC001&entYn=N&clasKeyword=#soap_ADI_0000000000002130
+# forien https://plus.kipris.or.kr/portal/data/service/DBII_000000000000036/view.do?pageIndex=5&menuNo=200100&kppBCode=&kppMCode=&kppSCode=&subTab=SC001&entYn=N&clasKeyword=#soap_ADI_0000000000001507
 auth_key <- "1fCRg1mSN=fYyE8OQdfhC6MZxEnDsjDmPsSbsPi0T=s="
 url <- "http://plus.kipris.or.kr/kipo-api/kipi/patUtiModInfoSearchSevice/"
 
